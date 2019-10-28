@@ -14,6 +14,7 @@ import com.igor.foodrecipes.requests.ServiceGenerator;
 import com.igor.foodrecipes.requests.responses.RecipeResponse;
 import com.igor.foodrecipes.requests.responses.RecipeSearchResponse;
 import com.igor.foodrecipes.util.Constants;
+import com.igor.foodrecipes.util.Testing;
 import com.igor.foodrecipes.viewmodels.RecipeListViewModel;
 
 import java.io.IOException;
@@ -38,6 +39,13 @@ public class RecipeListActivity extends BaseActivity {
 
         subscribeObservers();
 
+        findViewById(R.id.test).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                testRetrofitRequest();
+            }
+        });
+
 
 
     }
@@ -46,15 +54,24 @@ public class RecipeListActivity extends BaseActivity {
         mRecipeListViewModel.getRecipes().observe(this, new Observer<List<Recipe>>() {
             @Override
             public void onChanged(@Nullable List<Recipe> recipes) {
+                if(recipes!= null){
+                    Testing.printRecipes(recipes,"recipes test");
+                }
+
 
             }
         });
     }
+    private void searchRecipesApi(String query,int pageNumber) {
+
+        mRecipeListViewModel.searchRecipesApi(query, pageNumber);
+    }
 
 
     private void testRetrofitRequest(){
-        RecipeApi recipeApi = ServiceGenerator.getRecipeApi();
-        /*Call<RecipeSearchResponse> responseCall = recipeApi.searchRecipe(Constants.API_KEY,
+        searchRecipesApi("chicken breast",1);
+       /* RecipeApi recipeApi = ServiceGenerator.getRecipeApi();
+        *//*Call<RecipeSearchResponse> responseCall = recipeApi.searchRecipe(Constants.API_KEY,
                 "chicken breast","1");
         responseCall.enqueue(new Callback<RecipeSearchResponse>() {
             @Override
@@ -81,7 +98,7 @@ public class RecipeListActivity extends BaseActivity {
             public void onFailure(Call<RecipeSearchResponse> call, Throwable t) {
 
             }
-        });*/
+        });*//*
         Call<RecipeResponse> responseCall = recipeApi.getRecipe(Constants.API_KEY,"8c0314");
         responseCall.enqueue(new Callback<RecipeResponse>() {
             @Override
@@ -109,6 +126,6 @@ public class RecipeListActivity extends BaseActivity {
             public void onFailure(Call<RecipeResponse> call, Throwable t) {
 
             }
-        });
+        });*/
     }
 }
