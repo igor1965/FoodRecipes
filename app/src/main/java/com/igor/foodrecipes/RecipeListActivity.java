@@ -5,48 +5,43 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
+import com.igor.foodrecipes.adapters.OnRecipeListener;
+import com.igor.foodrecipes.adapters.RecipeRecyclerAdapter;
 import com.igor.foodrecipes.models.Recipe;
-import com.igor.foodrecipes.requests.RecipeApi;
-import com.igor.foodrecipes.requests.ServiceGenerator;
-import com.igor.foodrecipes.requests.responses.RecipeResponse;
-import com.igor.foodrecipes.requests.responses.RecipeSearchResponse;
-import com.igor.foodrecipes.util.Constants;
+
+
 import com.igor.foodrecipes.util.Testing;
 import com.igor.foodrecipes.viewmodels.RecipeListViewModel;
 
-import java.io.IOException;
-import java.util.ArrayList;
+
+
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-public class RecipeListActivity extends BaseActivity {
+
+
+public class RecipeListActivity extends BaseActivity implements OnRecipeListener {
 
     private static final String TAG = "RecipeListActivity";
     private RecipeListViewModel mRecipeListViewModel;
+    private RecyclerView mRecyclerView;
+    private RecipeRecyclerAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_list);
-
+        mRecyclerView = findViewById(R.id.recipe_list);
         mRecipeListViewModel = ViewModelProviders.of(this).get(RecipeListViewModel.class);
 
+        initRecyclerView();
         subscribeObservers();
-
-        findViewById(R.id.test).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                testRetrofitRequest();
-            }
-        });
-
-
+        testRetrofitRequest();
 
     }
     private void subscribeObservers(){
@@ -56,6 +51,7 @@ public class RecipeListActivity extends BaseActivity {
             public void onChanged(@Nullable List<Recipe> recipes) {
                 if(recipes!= null){
                     Testing.printRecipes(recipes,"recipes test");
+                    mAdapter.setRecipes(recipes);
                 }
 
 
@@ -65,6 +61,11 @@ public class RecipeListActivity extends BaseActivity {
     private void searchRecipesApi(String query,int pageNumber) {
 
         mRecipeListViewModel.searchRecipesApi(query, pageNumber);
+    }
+    private void initRecyclerView(){
+        mAdapter = new RecipeRecyclerAdapter(this);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
 
@@ -127,5 +128,15 @@ public class RecipeListActivity extends BaseActivity {
 
             }
         });*/
+    }
+
+    @Override
+    public void onRecipeClick(int position) {
+
+    }
+
+    @Override
+    public void onCategoryClick(String category) {
+
     }
 }
