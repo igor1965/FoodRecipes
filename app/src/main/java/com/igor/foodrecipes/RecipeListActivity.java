@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
 
@@ -41,7 +42,8 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
 
         initRecyclerView();
         subscribeObservers();
-        testRetrofitRequest();
+        //testRetrofitRequest();
+        initSearchView();
 
     }
     private void subscribeObservers(){
@@ -58,19 +60,35 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
             }
         });
     }
-    private void searchRecipesApi(String query,int pageNumber) {
+    /*private void searchRecipesApi(String query,int pageNumber) {
 
         mRecipeListViewModel.searchRecipesApi(query, pageNumber);
-    }
+    }*/
     private void initRecyclerView(){
         mAdapter = new RecipeRecyclerAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
+    private  void initSearchView(){
+        final SearchView searchView = findViewById(R.id.search_view);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                mRecipeListViewModel.searchRecipesApi(s, 1);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+
+    }
 
 
     private void testRetrofitRequest(){
-        searchRecipesApi("chicken breast",1);
+        //searchRecipesApi("chicken breast",1);
        /* RecipeApi recipeApi = ServiceGenerator.getRecipeApi();
         *//*Call<RecipeSearchResponse> responseCall = recipeApi.searchRecipe(Constants.API_KEY,
                 "chicken breast","1");

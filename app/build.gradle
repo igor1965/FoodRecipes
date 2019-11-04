@@ -41,8 +41,13 @@ dependencies {
     // ViewModel and LiveData
     implementation "android.arch.lifecycle:extensions:$lifecycle_version"
 
-    //Recyclerview
+
+    // RecyclerViews
     implementation "com.android.support:recyclerview-v7:$supportVersion"
+
+    // Design Support
+    implementation "com.android.support:design:$supportVersion"
+
 
     // Glide
     implementation "com.github.bumptech.glide:glide:$glideVersion"
