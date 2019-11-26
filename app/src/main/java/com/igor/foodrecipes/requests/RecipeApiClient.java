@@ -103,11 +103,17 @@ public class RecipeApiClient {
         private Call<RecipeSearchResponse>getRecipes(String query,int pageNumber){
             return ServiceGenerator.getRecipeApi().searchRecipe(Constants.API_KEY,query,String.valueOf(pageNumber));
         }
-        private void canselRequest(){
+        private void cancelRequest(){
             Log.d(TAG, "canselRequest: canseling the search request");
             cancelRequest = true;
         }
     }
+    public void cancelRequest(){
+        if(mRetrieveRecipesRunnable != null){
+            mRetrieveRecipesRunnable.cancelRequest();
+        }
+    }
+
 
 
 }
